@@ -1,0 +1,75 @@
+<div class="row addOrderPage">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="example-button-container addBtn">
+        <button mat-fab extended class="btn" (click)="backToList()">Order List</button>          
+      </div>
+    </div>
+    <app-card cardTitle="Add Order">
+
+      <form [formGroup]="orderForm">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Name</mat-label>
+                <input matInput formControlName="customerName" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerName')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Email</mat-label>
+                <input matInput formControlName="customerEmail" type="email">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerEmail')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Email
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Number</mat-label>
+                <input matInput formControlName="customerPhone" type="number">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerPhone')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Number
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div col-md-3>
+              <button
+                (click)="orderFormSubmit()"
+                mat-raised-button
+                color="primary"
+                class="btn-danger pull-right"
+            >
+                Submit
+            </button>
+            </div>
+          </div>
+        </div>
+      </form>  
+    </app-card>
+  </div>
+</div>

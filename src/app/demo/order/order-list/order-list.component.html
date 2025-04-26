@@ -1,0 +1,111 @@
+<div class="row orderListPage">
+  <div class="col-sm-12">
+    <div class="row">
+      <div class="example-button-container addBtn">
+        <button mat-fab extended class="btn" (click)="addOrder()">Add</button>          
+      </div>
+    </div>
+    <app-card cardTitle="Order">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource">
+      
+          <!-- Position Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> id </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="customerName">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.customer_name}} </td>
+          </ng-container>
+      
+          <!-- Weight Column -->
+          <ng-container matColumnDef="customerEmail">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let element"> {{element.customer_email}} </td>
+          </ng-container>
+      
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="customerNumber">
+            <th mat-header-cell *matHeaderCellDef> Number </th>
+            <td mat-cell *matCellDef="let element"> {{element.customer_number}} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                       showFirstLastButtons
+                       aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+
+      <form [formGroup]="orderForm">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Name</mat-label>
+                <input matInput formControlName="customerName" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerName')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Email</mat-label>
+                <input matInput formControlName="customerEmail" type="email">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerEmail')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Email
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Number</mat-label>
+                <input matInput formControlName="customerPhone" type="number">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerPhone')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Number
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div col-md-3>
+              <button
+                (click)="orderFormSubmit()"
+                mat-raised-button
+                color="primary"
+                class="btn-danger pull-right"
+            >
+                Submit
+            </button>
+            </div>
+          </div>
+        </div>
+      </form>  
+    </app-card>
+  </div>
+</div>
