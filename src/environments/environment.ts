@@ -7,8 +7,8 @@ import packageInfo from '../../package.json';
 export const environment = {
   appVersion: packageInfo.version,
   production: false,
-  API_BASE_URL: 'http://13.127.195.90:3000/',
-  //API_BASE_URL: 'http://localhost:3000/',
+  //API_BASE_URL: 'http://13.127.195.90:3000/',
+  API_BASE_URL: 'http://localhost:3000/',
   API_PATH: 'api/v1/',
   ENCRYPT: 'TSOLRgdkyuyFYrKZvaNiXdwHwq7Vsw==',
   IV: '5183666c72eec9e4',

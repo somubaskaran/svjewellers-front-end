@@ -5,7 +5,7 @@
         <button mat-fab extended class="btn" (click)="backToList()">Order List</button>          
       </div>
     </div>
-    <app-card cardTitle="Add Order">
+    <app-card cardTitle="Add Order" *ngIf="type=='edit' || type=='add'">
 
       <form [formGroup]="orderForm">
         <div class="container">
@@ -55,21 +55,300 @@
                 </mat-error>
               </mat-form-field>
             </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer City</mat-label>
+                <input matInput formControlName="customerCity" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerCity')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Item Name</mat-label>
+                <input matInput formControlName="itemName" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('itemName')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Item Weight</mat-label>
+                <input matInput formControlName="itemWeight" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('itemWeight')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Item Purity</mat-label>
+                <input matInput formControlName="itemPurity" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('itemPurity')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Metal Type</mat-label>
+                <input matInput formControlName="metalType" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('metalType')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <input type="file" class="file-input"
+       (change)="onFileSelected($event)" #fileUpload>
+
+              <!-- <div class="file-upload">
+
+                {{fileName || "No file uploaded yet."}}
+
+                  <button mat-mini-fab color="primary" class="upload-btn"
+                    (click)="fileUpload.click()">
+                      <mat-icon>attach_file</mat-icon>
+                  </button>
+              </div> -->
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Due Date</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="dueDate">
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('dueDate')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-8">
+              <mat-form-field class="example-full-width">
+                <mat-label>Description of Order</mat-label>
+                <textarea matInput placeholder="" formControlName="description"></textarea>
+              </mat-form-field>
+            </div>
           </div>
           <div class="row">
-            <div col-md-3>
+            <div col-md-3 class="addBtn">
               <button
                 (click)="orderFormSubmit()"
                 mat-raised-button
                 color="primary"
-                class="btn-danger pull-right"
+                class="btn-danger pull-right btn"
             >
-                Submit
+                {{submittext}}
             </button>
             </div>
           </div>
         </div>
       </form>  
+    </app-card>
+    <app-card cardTitle="View Order" *ngIf="type=='view'">
+      <form [formGroup]="orderForm">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Name</mat-label>
+                <input [disabled]="isDisabled" matInput formControlName="customerName" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerName')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Email</mat-label>
+                <input matInput formControlName="customerEmail" type="email">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerEmail')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Email
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer Number</mat-label>
+                <input matInput formControlName="customerPhone" type="number">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerPhone')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Number
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Customer City</mat-label>
+                <input matInput formControlName="customerCity" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('customerCity')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Item Name</mat-label>
+                <input matInput formControlName="itemName" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('itemName')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Item Weight</mat-label>
+                <input matInput formControlName="itemWeight" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('itemWeight')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Item Purity</mat-label>
+                <input matInput formControlName="itemPurity" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('itemPurity')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Metal Type</mat-label>
+                <input matInput formControlName="metalType" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('metalType')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <!-- <input type="file" class="file-input"
+       (change)="onFileSelected($event)" #fileUpload>
+
+              <div class="file-upload">
+
+                {{fileName || "No file uploaded yet."}}
+
+                  <button mat-mini-fab color="primary" class="upload-btn"
+                    (click)="fileUpload.click()">
+                      <mat-icon>attach_file</mat-icon>
+                  </button>
+              </div> -->
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Due Date</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="dueDate">
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('dueDate')
+                            .hasError('required')
+                    "
+                >
+                    Please Enter Customer Name
+                </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-8">
+              <mat-form-field class="example-full-width">
+                <mat-label>Description of Order</mat-label>
+                <textarea matInput placeholder="" formControlName="description"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>      
     </app-card>
   </div>
 </div>

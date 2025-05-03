@@ -27,8 +27,22 @@ export class OrderService {
         return data;
       }));
   }
-  
-  getOrder(request){
+  updateOrder(request){
+    const accessToken = "";
+      let api_url = '';
+      api_url = environment.API_BASE_URL + '' + environment.API_ADMIN_URL + 'order/update';
+      return this.http.post<any>(api_url, request, {
+        headers: {
+          'content-type': 'application/json',
+          'authorization': 'Bearer ' + accessToken
+        },
+      }).pipe(map((data: any) => {
+        //const decryptData = this.encrypt.decryptData(data.data);
+        console.log(data);
+        return data;
+      }));
+  }
+  getOrderList(request){
     const accessToken = "";
       let api_url = '';
       api_url = environment.API_BASE_URL + '' + environment.API_ADMIN_URL + 'order/list';
@@ -44,5 +58,37 @@ export class OrderService {
       }));
   }
 
+  getOrder(request){
+    const accessToken = "";
+      let api_url = '';
+      api_url = environment.API_BASE_URL + '' + environment.API_ADMIN_URL + 'order/getOrder';
+      return this.http.post<any>(api_url, request, {
+        headers: {
+          'content-type': 'application/json',
+          'authorization': 'Bearer ' + accessToken
+        },
+      }).pipe(map((data: any) => {
+        //const decryptData = this.encrypt.decryptData(data.data);
+        console.log(data);
+        return data;
+      }));
+  }
+
+  deleteOrder(request)
+  {
+    const accessToken = "";
+      let api_url = '';
+      api_url = environment.API_BASE_URL + '' + environment.API_ADMIN_URL + 'order/deleteOrder';
+      return this.http.post<any>(api_url, request, {
+        headers: {
+          'content-type': 'application/json',
+          'authorization': 'Bearer ' + accessToken
+        },
+      }).pipe(map((data: any) => {
+        //const decryptData = this.encrypt.decryptData(data.data);
+        console.log(data);
+        return data;
+      }));
+  }
 }
 

@@ -15,10 +15,11 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 
 @Component({
   selector: 'app-order-list',
-  imports: [CommonModule, CardComponent, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, MatTableModule, MatPaginatorModule, MatDividerModule, MatButtonModule],
+  imports: [CommonModule, CardComponent, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, MatTableModule, MatPaginatorModule, MatDividerModule, MatButtonModule, MatSortModule],
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.scss'],
   providers: [HttpClient]
@@ -26,6 +27,8 @@ import {MatButtonModule} from '@angular/material/button';
 export class OrderListComponent {
   orderForm: FormGroup;
   OrderService: OrderService = inject(OrderService);
+  
+  length;
   requestParam: {
     current: number;
     pasgesize: number;
@@ -42,28 +45,26 @@ export class OrderListComponent {
 
   }
 
-  displayedColumns: string[] = ['id', 'customerName', 'customerEmail', 'customerNumber'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['id', 'itemName', 'customerName', 'customerEmail', 'customerNumber', 'dueDate', 'actions'];
+
+dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  @ViewChild(MatSort) sort: MatSort;
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    
   }
 
   ngOnInit(): void {
-    this.orderForm = this._formBuilder.group({
-        customerName: ['', Validators.required],
-        customerEmail: ['', Validators.required],
-        customerPhone: ['', Validators.required],
-    });
     this.getOrderList();
   }
   getOrderList(){
-    this.OrderService.getOrder(this.requestParam).subscribe({
+    this.OrderService.getOrderList(this.requestParam).subscribe({
       next: (result:any)=>{
         console.log(result.data.data);
-        this.dataSource = result.data.data;
+        this.dataSource = new MatTableDataSource<any>(result.data.data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
       error: (err:any)=> {
 
@@ -83,28 +84,48 @@ export class OrderListComponent {
       const requestSenddata = {
         data : sendData
       }
-      this.OrderService.addOrder(requestSenddata).subscribe(
-          (data: any) => {
-            console.log(data);
-              if(data.statuscode==200){
-                  // this.elements.closeAll();
-                  // this.getPlayerList(this.tournmentId, this.categoryId, this.selectedTeamId.team_id);
-                  // //this.getTournmentDetail(this.tournmentId, this.categoryId);
-                  // this.addPlayerForm.reset();  
-              } else if(data.statuscode==201) {
-                  //this.showPlayerError = true;
-              }
-      },
-      (error: any) => {
+      this.OrderService.addOrder(requestSenddata).subscribe({
+        next: (result:any)=>{
+          console.log(result.data.data);
           
-      });
-      this.OrderService.addOrder(sendData).subscribe((response) => {
-        //this.data = response;
+        },
+        error: (err:any)=> {
+  
+        },
+        complete: ()=>{
+  
+        }
       });
     }
   }
   addOrder(){
-    this.router.navigate(['/add-order']);
+    this.router.navigate(['/add-order'], { queryParams: { type: 'add' }});
+  }
+  editOrder(element){
+    this.router.navigate( ['/add-order'], { queryParams: { id: element.id, type: 'edit' }});
+  }
+  deleteOrder(element){
+    var sendData = {
+      deleteId : element.id,
+    }
+
+    this.OrderService.deleteOrder(sendData).subscribe({
+      next: (result:any)=>{
+        console.log(result.data.data);
+        this.getOrderList();
+      },
+      error: (err:any)=> {
+
+      },
+      complete: ()=>{
+
+      }
+    });
+  }
+  viewOrder(element){
+    this.router.navigate( ['/add-order'], { queryParams: { id: element.id, type: 'view' }});
+  }
+  announceSortChange() {
   }
 }
 
@@ -134,6 +155,4 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
   {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
   {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
 ];

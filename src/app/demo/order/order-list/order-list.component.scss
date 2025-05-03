@@ -15,5 +15,25 @@
     }
     .OrderTableDiv {
         overflow-x: scroll;
+        table {
+            
+            th {
+                font-size: 13px;
+                font-weight: 700;
+                color: #fff;
+            }
+        }
+    }
+    .iconBtn {
+        border: none;
+        background: none;
     }
 }
+table {
+    width: 100%;
+  }
+  
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+  
