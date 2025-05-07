@@ -42,9 +42,9 @@ File: style.css
     display: none !important    ;
   } 
 
-  .mat-mdc-select-value-text {
-    margin-left: 50px;
-  }  
   thead.ng-star-inserted {
     background: #1890ff !important;
+}
+.cdk-overlay-pane {
+    background: aliceblue;
 }

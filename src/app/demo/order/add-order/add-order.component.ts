@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
 import {FormControl, ReactiveFormsModule, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { OrderService } from 'src/app/theme/shared/service/order.service';
@@ -16,10 +17,26 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, switchMap } from 'rxjs';
+// import * as _moment from 'moment';
+// import {default as _rollupMoment} from 'moment';
+
+// const moment = _rollupMoment || _moment;
+
+// export const MY_FORMATS = {
+//   parse: {
+//     dateInput: 'LL',
+//   },
+//   display: {
+//     dateInput: 'LL',
+//     monthYearLabel: 'MMM YYYY',
+//     dateA11yLabel: 'LL',
+//     monthYearA11yLabel: 'MMMM YYYY',
+//   },
+// };
 
 @Component({
   selector: 'app-add-order',
-  imports: [CommonModule, CardComponent, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, MatTableModule, MatPaginatorModule, MatFormFieldModule, MatInputModule, MatDatepickerModule],
+  imports: [CommonModule, CardComponent, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, MatTableModule, MatPaginatorModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatSelectModule],
   templateUrl: './add-order.component.html',
   styleUrls: ['./add-order.component.scss'],
   providers: [HttpClient, provideNativeDateAdapter()],
@@ -42,6 +59,73 @@ selectedId;
 submittext;
 type;
 isDisabled = true;
+showOthers = false;
+
+itemNameList = [
+  {value: 'chain', viewValue: 'Chain'},
+  {value: 'ring', viewValue: 'Ring'},
+  {value: 'bracelet', viewValue: 'Bracelet'},
+  {value: 'haram', viewValue: 'Haram'},
+  {value: 'necklace', viewValue: 'Necklace'},
+  {value: 'tups', viewValue: 'Tups'},
+  {value: 'flat', viewValue: 'Flat'},
+  {value: 'tupsJimiki', viewValue: 'TupsJimiki'},
+  {value: 'bangles', viewValue: 'Bangles'},
+  {value: 'other', viewValue: 'Others'},
+];
+metalTypeList = [
+  {value: 'gold', viewValue: 'Gold'},
+  {value: 'silver', viewValue: 'Silver'},
+  {value: 'diamond', viewValue: 'Diamond'}
+];
+itemPurityList = [
+  {value: '18', viewValue: '18k'},
+  {value: '20', viewValue: '20k'},
+  {value: '22', viewValue: '22k'}
+];
+itemStatusList = [
+
+]
+districtList = [
+  {value: 'ariyalur', viewValue: 'Ariyalur'},
+  {value: 'chengalpattu', viewValue: 'Chengalpattu'},
+  {value: 'chennai', viewValue: 'Chennai'},
+  {value: 'coimbatore', viewValue: 'Coimbatore'},
+  {value: 'cuddalore', viewValue: 'Cuddalore'},
+  {value: 'dharmapuri', viewValue: 'Dharmapuri'},
+  {value: 'dindigul', viewValue: 'Dindigul'},
+  {value: 'erode', viewValue: 'Erode'},
+  {value: 'kallakurichi', viewValue: 'Kallakurichi'},
+  {value: 'kanchipuram', viewValue: 'Kanchipuram'},
+  {value: 'kanyakumari', viewValue: 'Kanyakumari'},
+  {value: 'karur', viewValue: 'Karur'},
+  {value: 'krishnagiri', viewValue: 'Krishnagiri'},
+  {value: 'madurai', viewValue: 'Madurai'},
+  {value: 'mayiladuthurai', viewValue: 'Mayiladuthurai'},
+  {value: 'nagapattinam', viewValue: 'Nagapattinam'},
+  {value: 'nilgiris', viewValue: 'Nilgiris'},
+  {value: 'namakkal', viewValue: 'Namakkal'},
+  {value: 'perambalur', viewValue: 'Perambalur'},
+  {value: 'pudukkottai', viewValue: 'Pudukkottai'},
+  {value: 'ramanathapuram', viewValue: 'Ramanathapuram'},
+  {value: 'ranipet', viewValue: 'Ranipet'},
+  {value: 'salem', viewValue: 'Salem'},
+  {value: 'sivaganga', viewValue: 'Sivaganga'},
+  {value: 'tenkasi', viewValue: 'Tenkasi'},
+  {value: 'tirupur', viewValue: 'Tirupur'},
+  {value: 'tiruchirappalli', viewValue: 'Tiruchirappalli'},
+  {value: 'theni', viewValue: 'Theni'},
+  {value: 'tirunelveli', viewValue: 'Tirunelveli'},
+  {value: 'thanjavur', viewValue: 'Thanjavur'},
+  {value: 'thoothukudi', viewValue: 'Thoothukudi'},
+  {value: 'tirupattur', viewValue: 'Tirupattur'},
+  {value: 'tiruvallur', viewValue: 'Tiruvallur'},
+  {value: 'tiruvarur', viewValue: 'Tiruvarur'},
+  {value: 'tiruvannamalai', viewValue: 'Tiruvannamalai'},
+  {value: 'vellore', viewValue: 'Vellore'},
+  {value: 'viluppuram', viewValue: 'Viluppuram'},
+  {value: 'virudhunagar', viewValue: 'Virudhunagar'}
+]
   constructor(
     private _formBuilder: FormBuilder,
     private router: Router,
@@ -58,16 +142,17 @@ isDisabled = true;
         // customerName: ['', Validators.required],
         // customerEmail: ['', Validators.required],
         // customerPhone: ['', Validators.required],
-        customerName: [''],
+        customerName: ['', Validators.required],
         customerEmail: [''],
-        customerPhone: [''],
-        customerCity: [''],
-        itemName: [''],
-        itemWeight: [''],
-        itemPurity: [''],
-        metalType: [''],
-        dueDate: [''],
-        description: ['']
+        customerPhone: ['', Validators.required],
+        customerCity: ['', Validators.required],
+        itemName: ['', Validators.required],
+        itemNameOther: [''],
+        itemWeight: ['', Validators.required],
+        itemPurity: ['', Validators.required],
+        metalType: ['', Validators.required],
+        dueDate: ['', Validators.required],
+        description: ['', Validators.required]
     });
     
     this.route.queryParams.subscribe(
@@ -175,6 +260,9 @@ isDisabled = true;
           this.orderForm.controls['description'].disable();
           
         }
+        if(orderItem.item_name=='other'){
+          this.showOthers = true;
+        }
       },
       error: (err:any)=> {
 
@@ -204,4 +292,16 @@ isDisabled = true;
         // upload$.subscribe();
     }
 }
+  itemNameChangeFunc(event){
+    console.log(event.value);
+    if(event.value=='other'){
+      this.showOthers = true;
+      this.orderForm.get('itemNameOther')?.addValidators(Validators.required);
+      this.orderForm.controls['itemNameOther'].updateValueAndValidity();
+    } else {
+      this.showOthers = false;
+      this.orderForm.get('itemNameOther')?.clearValidators();
+      this.orderForm.controls['itemNameOther'].updateValueAndValidity();
+    }
+  }
 }

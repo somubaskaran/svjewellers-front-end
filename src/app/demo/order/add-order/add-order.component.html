@@ -6,7 +6,6 @@
       </div>
     </div>
     <app-card cardTitle="Add Order" *ngIf="type=='edit' || type=='add'">
-
       <form [formGroup]="orderForm">
         <div class="container">
           <div class="row">
@@ -43,7 +42,7 @@
             <div class="col-md-4">
               <mat-form-field>
                 <mat-label>Customer Number</mat-label>
-                <input matInput formControlName="customerPhone" type="number">
+                <input matInput formControlName="customerPhone" type="number" maxlength="10">
                 <mat-error
                     *ngIf="
                     orderForm
@@ -58,7 +57,11 @@
             <div class="col-md-4">
               <mat-form-field>
                 <mat-label>Customer City</mat-label>
-                <input matInput formControlName="customerCity" type="text">
+                <mat-select formControlName="customerCity">
+                  @for (district of districtList; track district) {
+                    <mat-option [value]="district.value">{{district.viewValue}}</mat-option>
+                  }
+                </mat-select>
                 <mat-error
                     *ngIf="
                     orderForm
@@ -66,18 +69,37 @@
                             .hasError('required')
                     "
                 >
-                    Please Enter Customer Name
+                    Please Enter Customer City
                 </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-4">
               <mat-form-field>
                 <mat-label>Item Name</mat-label>
-                <input matInput formControlName="itemName" type="text">
+                <mat-select formControlName="itemName" (selectionChange)="itemNameChangeFunc($event)">
+                  @for (item of itemNameList; track item) {
+                    <mat-option [value]="item.value">{{item.viewValue}}</mat-option>
+                  }
+                </mat-select>
                 <mat-error
                     *ngIf="
                     orderForm
                             .get('itemName')
+                            .hasError('required')
+                    "
+                >
+                    Please Select Item Name
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4" *ngIf="showOthers">
+              <mat-form-field>
+                <mat-label>Item Name Other</mat-label>
+                <input matInput formControlName="itemNameOther" type="text">
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('itemNameOther')
                             .hasError('required')
                     "
                 >
@@ -87,7 +109,7 @@
             </div>
             <div class="col-md-4">
               <mat-form-field>
-                <mat-label>Item Weight</mat-label>
+                <mat-label>Item Weight(g)</mat-label>
                 <input matInput formControlName="itemWeight" type="text">
                 <mat-error
                     *ngIf="
@@ -103,22 +125,11 @@
             <div class="col-md-4">
               <mat-form-field>
                 <mat-label>Item Purity</mat-label>
-                <input matInput formControlName="itemPurity" type="text">
-                <mat-error
-                    *ngIf="
-                    orderForm
-                            .get('itemPurity')
-                            .hasError('required')
-                    "
-                >
-                    Please Enter Customer Name
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-md-4">
-              <mat-form-field>
-                <mat-label>Metal Type</mat-label>
-                <input matInput formControlName="metalType" type="text">
+                <mat-select formControlName="itemPurity">
+                  @for (itemPurity of itemPurityList; track itemPurity) {
+                    <mat-option [value]="itemPurity.value">{{itemPurity.viewValue}}</mat-option>
+                  }
+                </mat-select>
                 <mat-error
                     *ngIf="
                     orderForm
@@ -126,13 +137,32 @@
                             .hasError('required')
                     "
                 >
-                    Please Enter Customer Name
+                    Please Select Metal Type
                 </mat-error>
               </mat-form-field>
             </div>
             <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Metal Type</mat-label>
+                <mat-select formControlName="metalType">
+                  @for (district of metalTypeList; track district) {
+                    <mat-option [value]="district.value">{{district.viewValue}}</mat-option>
+                  }
+                </mat-select>
+                <mat-error
+                    *ngIf="
+                    orderForm
+                            .get('metalType')
+                            .hasError('required')
+                    "
+                >
+                    Please Select Metal Type
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- <div class="col-md-4">
               <input type="file" class="file-input"
-       (change)="onFileSelected($event)" #fileUpload>
+       (change)="onFileSelected($event)" #fileUpload> -->
 
               <!-- <div class="file-upload">
 
@@ -143,7 +173,7 @@
                       <mat-icon>attach_file</mat-icon>
                   </button>
               </div> -->
-            </div>
+            <!-- </div> -->
             <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Due Date</mat-label>

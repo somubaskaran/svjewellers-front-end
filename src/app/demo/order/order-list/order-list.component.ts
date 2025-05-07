@@ -45,7 +45,7 @@ export class OrderListComponent {
 
   }
 
-  displayedColumns: string[] = ['id', 'itemName', 'customerName', 'customerEmail', 'customerNumber', 'dueDate', 'actions'];
+  displayedColumns: string[] = ['itemName', 'customerName', 'customerCity', 'weight','customerNumber', 'dueDate', 'status', 'actions'];
 
 dataSource = new MatTableDataSource<any>();
 
@@ -61,8 +61,21 @@ dataSource = new MatTableDataSource<any>();
   getOrderList(){
     this.OrderService.getOrderList(this.requestParam).subscribe({
       next: (result:any)=>{
-        console.log(result.data.data);
-        this.dataSource = new MatTableDataSource<any>(result.data.data);
+        const orderList = result.data.data;
+        console.log(orderList);
+        orderList.forEach(element => {
+          //const statusText;
+          if(element.status==0){
+            element.status = 'created';
+          } else if (element.status==1) {
+            element.status = 'in progress';
+          } else if (element.status==2) {
+            element.status = 'on hold';
+          } else if (element.status==3) {
+            element.status = 'delivered';
+          }
+        });
+        this.dataSource = new MatTableDataSource<any>(orderList);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
